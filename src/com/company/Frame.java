@@ -7,21 +7,10 @@ public class Frame {
     private String destination;
     private String source;
     private String type_str;
-    private int type;
+    private String type;
     private Datagram data; // du type d'une classe en fonction de la var type
 
-    public Frame(String file) {
-        //open file
-        System.out.println(file);
-
-        //TODO attention il faut ignorer les parties de texte
-
-        // sépare les octets
-        String[] arr = file.split(" ");//"[0-9]{4}");
-
-        ArrayList<String> frame = new ArrayList<>();
-        Collections.addAll(frame, arr);
-
+    public Frame(RawFrame frame) {
         // Destination
         destination = "";
         for (int x = 0; x < 5; x++) {
@@ -38,22 +27,54 @@ public class Frame {
         source += frame.remove(0);
 
 
-        // Type TODO
-        type_str = "0x";
+        // Type
+        type = "";
         for (int x = 0; x < 2; x++) {
-            type_str += frame.remove(0);
+            type += frame.remove(0);
         }
-        type = Integer.decode(type_str);
+        switch (type) {
+            case "0800":
+                type_str = "IPv4 (0x0800)";
+                break;
+            case "0806":
+                type_str = "ARP (0x0806)";
+                break;
+            case "8035":
+                type_str = "RARP (0x8035)";
+                break;
+            case "8098":
+                type_str = "Appletalk (0x8098)";
+                break;
+            case "86dd":
+                type_str = "IPv6 (0x86dd)";
+                break;
+                //TODO erreur
+        }
+        /*
+        0800 DoD Internet (Datagramme IP)
+        0805 X.25 niveau 3
+        0806 ARP
+        8035 RARP
+        8098 Appletalk
 
-
-        System.out.println("\n--- Ethernet II:" +
-                "\n\tDestination: " + destination +
-                "\n\tSource: " + source +
-                "\n\tType: X" + type + " (" + type_str + ")" // TODO
-        );
+        0x0800 IP(v4), Internet Protocol version 4
+        0x0806 ARP, Address Resolution Protocol
+        0x8137 IPX, Internet Packet eXchange (Novell)
+        0x86dd IPv6, Internet Protocol version 6
+        */
 
         data = new Datagram(frame);
+        //TODO gestion type de datagram : IPv4, ARP ...
     }
 
     // getters pour tous les attributs
+
+    @Override
+    public String toString() {
+        return "\n\n--- Ethernet II:" +
+                "\n\tDestination: " + destination +
+                "\n\tSource: " + source +
+                "\n\tType: " + type_str +
+                data.toString();
+    }
 }
