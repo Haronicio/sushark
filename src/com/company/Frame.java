@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Frame {
-    private String header = "--- Ethernet II:";
     private String destination;
     private String source;
     private String type;
@@ -88,10 +87,6 @@ public class Frame {
         }
     }
 
-    public String getHeader() {
-        return this.header;
-    }
-
     public String getDestination() {
         return this.destination;
     }
@@ -102,6 +97,10 @@ public class Frame {
 
     public String getType() {
         return this.type;
+    }
+
+    public Datagram getDatagram() {
+        return this.data;
     }
 
     @Override

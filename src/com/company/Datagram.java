@@ -6,24 +6,13 @@ import java.util.ArrayList;
 
 public class Datagram {
     private String version;
-    private int ihl;
+    private String ihl;
     private String tos;
-
-    private String total_length_str;
-    private int total_length;
-
-    private String identification_str;
-    private int identification;
-
-    private String flags_fragment_offset;
-    private String flags;
+    private String total_length;
+    private String identification;
     private String flags_str;
     private String fragment_offset;
-
-    private String ttl_str;
-    private int ttl;
-
-    private int protocol;
+    private String ttl;
     private String protocol_str;
     private String header_checksum;
     private String source;
@@ -40,7 +29,7 @@ public class Datagram {
             version = Integer.decode("0x" + version_ihl.substring(0, 1)).toString();
 
             // IHL : valeur*4 (car mot de 32 bits)
-            ihl = Integer.decode("0x" + version_ihl.substring(1, 2)) * 4;
+            ihl = Integer.toString(Integer.decode("0x" + version_ihl.substring(1, 2)) * 4);
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Datagram au niveau du champ 'Version & IHL'");
         }
@@ -59,7 +48,7 @@ public class Datagram {
             for (int x = 0; x < 2; x++) {
                 total_length_str += datagram.remove(0);
             }
-            total_length = Integer.decode(total_length_str);
+            total_length = Integer.toString(Integer.decode(total_length_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Datagram au niveau du champ 'Total Length'");
         }
@@ -67,11 +56,11 @@ public class Datagram {
 
         try {
             // Identification
-            identification_str = "0x";
+            String identification_str = "0x";
             for (int x = 0; x < 2; x++) {
                 identification_str += datagram.remove(0);
             }
-            identification = Integer.decode(identification_str);
+            identification = identification_str + " (" + Integer.toString(Integer.decode(identification_str))+ ")";
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Datagram au niveau du champ 'Identification'");
         }
@@ -79,7 +68,7 @@ public class Datagram {
 
         try {
             // Flags & Fragment offset
-            flags_fragment_offset = "0x";
+            String flags_fragment_offset = "0x";
             for (int x = 0; x < 2; x++) {
                 flags_fragment_offset += datagram.remove(0);
             }
@@ -90,7 +79,7 @@ public class Datagram {
             }
 
             // Flags
-            flags = flags_fragment_offset.substring(1, 3);
+            String flags = flags_fragment_offset.substring(1, 3);
             flags_str = Integer.toHexString(Integer.parseInt(flags, 2));
             while (flags_str.length() < 2) {
                 flags_str = "0" + flags_str;
@@ -116,8 +105,8 @@ public class Datagram {
 
         try {
             // Time to live
-            ttl_str = "0x" + datagram.remove(0);
-            ttl = Integer.decode(ttl_str);
+            String ttl_str = "0x" + datagram.remove(0);
+            ttl = Integer.toString(Integer.decode(ttl_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Datagram au niveau du champ 'Time to live'");
         }
@@ -125,7 +114,7 @@ public class Datagram {
 
         try {
             // Protocol
-            protocol = Integer.decode("0x" + datagram.remove(0));
+            int protocol = Integer.decode("0x" + datagram.remove(0));
             switch (protocol) {
                 case 1:
                     protocol_str = "ICMP (1)";
@@ -207,7 +196,57 @@ public class Datagram {
         }
     }
 
-    // getters pour tous les attributs
+    public String getVersion() {
+        return this.version;
+    }
+
+    public String getIhl() {
+        return this.ihl;
+    }
+
+    public String getTos() {
+        return this.tos;
+    }
+
+    public String getTotalLength() {
+        return this.total_length;
+    }
+
+    public String getIdentification() {
+        return this.identification;
+    }
+
+    public String getFlags() {
+        return this.flags_str;
+    }
+
+    public String getFragmentOffset() {
+        return this.fragment_offset;
+    }
+
+    public String getTtl() {
+        return this.ttl;
+    }
+
+    public String getProtocol() {
+        return this.protocol_str;
+    }
+
+    public String getHeaderChecksum() {
+        return this.header_checksum;
+    }
+
+    public String getSource() {
+        return this.source;
+    }
+
+    public String getDestination() {
+        return this.destination;
+    }
+
+    public Segment getSegment() {
+        return this.data;
+    }
 
     @Override
     public String toString() {
@@ -220,7 +259,7 @@ public class Datagram {
                 "\n\tHeader Length: " + ihl +
                 "\n\tDifferentiated Services Field: " + tos +
                 "\n\tTotal Length: " + total_length +
-                "\n\tIdentification: " + identification_str + " (" + identification + ")" +
+                "\n\tIdentification: " + identification +
                 "\n\tFlags: " + flags_str +
                 "\n\tFragment offset: " + fragment_offset +
                 "\n\tTime to live: " + ttl +

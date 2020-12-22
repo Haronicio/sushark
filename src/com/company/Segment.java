@@ -1,93 +1,74 @@
 package com.company;
 
 public class Segment {
-    private int source;
-    private String source_str;
-
-    private int destination;
-    private String destination_str;
-
-    private Long seq_number;
-    private String seq_number_str;
-
-    private Long ack_number;
-    private String ack_number_str;
-
-    private String header_flags;
-    private int header_length;
+    private String source;
+    private String destination;
+    private String seq_number;
+    private String ack_number;
     private String header_length_str;
-    private String flags;
     private String flags_str;
-    private char[] flags_char;
-
-    private int window_size;
-    private String window_size_str;
-
+    private String window_size;
     private String checksum;
-
-    private int urgent_pointer;
-    private String urgent_pointer_str;
-
+    private String urgent_pointer;
     private String options;
-
     private Message data;
-
 
     public Segment() {}
 
     public void init(RawFrame segment) throws BadFrameFormatException {
         try {
             // Source port
-            source_str = "0x";
+            String source_str = "0x";
             for (int x = 0; x < 2; x++) {
                 source_str += segment.remove(0);
             }
-            source = Integer.decode(source_str);
+            source = Integer.toString(Integer.decode(source_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Source port'");
         }
 
         try {
             // Destination port
-            destination_str = "0x";
+            String destination_str = "0x";
             for (int x = 0; x < 2; x++) {
                 destination_str += segment.remove(0);
             }
-            destination = Integer.decode(destination_str);
+            destination = Integer.toString(Integer.decode(destination_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Destination port'");
         }
 
         try {
             // Sequence number
-            seq_number_str = "0x";
+            String seq_number_str = "0x";
             for (int x = 0; x < 4; x++) {
                 seq_number_str += segment.remove(0);
             }
-            seq_number = Long.decode(seq_number_str);
+            seq_number = Long.toString(Long.decode(seq_number_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Sequence number'");
         }
 
         try {
             // Acknowledgment number
-            ack_number_str = "0x";
+            String ack_number_str = "0x";
             for (int x = 0; x < 4; x++) {
                 ack_number_str += segment.remove(0);
             }
-            ack_number = Long.decode(ack_number_str);
+            ack_number = Long.toString(Long.decode(ack_number_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Acknowledgment number'");
         }
 
 
+        int header_length;
         try {
             // Flags & Fragment offset
-            header_flags = "0x";
+            String header_flags = "0x";
             for (int x = 0; x < 2; x++) {
                 header_flags += segment.remove(0);
             }
-            flags_str = header_flags; // TODO
+            flags_str = header_flags;
             header_flags = Integer.toBinaryString(Integer.decode(header_flags));
 
             while (header_flags.length() < 16) {
@@ -100,7 +81,7 @@ public class Segment {
             header_length_str += " .... = " + header_length * 4 + " bytes (" + header_length + ")";
 
             // Flags
-            flags = header_flags.substring(7);
+            String flags = header_flags.substring(7);
             flags_str = Integer.toHexString(Integer.parseInt(flags, 2));
             while (flags_str.length() < 3) {
                 flags_str = "0" + flags_str;
@@ -108,7 +89,7 @@ public class Segment {
             flags_str = "0x" + flags_str;
             flags_str += "\n\t\t000. .... .... = Reserved: Not set";
 
-            flags_char = flags.toCharArray();
+            char[] flags_char = flags.toCharArray();
 
             String nonce_txt = "Not set";
             char nonce = flags_char[0];
@@ -178,11 +159,11 @@ public class Segment {
 
         try {
             // Window size value
-            window_size_str = "0x";
+            String window_size_str = "0x";
             for (int x = 0; x < 2; x++) {
                 window_size_str += segment.remove(0);
             }
-            window_size = Integer.decode(window_size_str);
+            window_size = Integer.toString(Integer.decode(window_size_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Window size value'");
         }
@@ -199,11 +180,11 @@ public class Segment {
 
         try {
             // Urgent pointer
-            urgent_pointer_str = "0x";
+            String urgent_pointer_str = "0x";
             for (int x = 0; x < 2; x++) {
                 urgent_pointer_str += segment.remove(0);
             }
-            urgent_pointer = Integer.decode(urgent_pointer_str);
+            urgent_pointer = Integer.toString(Integer.decode(urgent_pointer_str));
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Urgent pointer'");
         }
@@ -213,7 +194,7 @@ public class Segment {
             options = "";
             int options_kind;
             int options_length;
-            int options_size = (header_length-5) * 4;
+            int options_size = (header_length -5) * 4;
             for (int x = 0; x < options_size; x++) {
                 // Kind
                 options_kind = Integer.decode("0x" + segment.remove(0));
@@ -305,6 +286,50 @@ public class Segment {
         }
     }
 
+    public String getSource() {
+        return this.source;
+    }
+
+    public String getDestination() {
+        return this.destination;
+    }
+
+    public String getSeqNumber() {
+        return this.seq_number;
+    }
+
+    public String getAckNumber() {
+        return this.ack_number;
+    }
+
+    public String getHeaderLength() {
+        return this.header_length_str;
+    }
+
+    public String getFlags() {
+        return this.flags_str;
+    }
+
+    public String getWindowSize() {
+        return this.window_size;
+    }
+
+    public String getChecksum() {
+        return this.checksum;
+    }
+
+    public String getUrgentPointer() {
+        return this.urgent_pointer;
+    }
+
+    public String getOptions() {
+        return this.options;
+    }
+
+    public Message getMessage() {
+        return this.data;
+    }
+
     @Override
     public String toString() {
         String data_str = "";
@@ -317,7 +342,7 @@ public class Segment {
                 "\n\tSequence number: " + seq_number +
                 "\n\tAcknowledgment number: " + ack_number +
                 "\n\tHeader Length: \n\t\t" + header_length_str +
-                "\n\tFlags: " + flags_str + // TODO
+                "\n\tFlags: " + flags_str +
                 "\n\tWindow size value: " + window_size +
                 "\n\tChecksum: " + checksum +
                 "\n\tUrgent Pointer: " + urgent_pointer +
