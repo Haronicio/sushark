@@ -16,10 +16,13 @@ public class Main {
 
 
         String file_path;
+        String output_path;
         if (args.length > 0) {
             file_path = args[0];
+            output_path = args[1];
         } else {
             file_path = "data/half.txt";
+            output_path = "out.txt";
         }
 
         // TODO prendre en compte le cas de plusieurs frame dans un fichier
@@ -46,21 +49,13 @@ public class Main {
             return;
         }
 
-        // sépare les lignes à partir des offset
-        String[] arr = data.split("[ ]*[0-9]{4}");
-
-        StringBuilder builder = new StringBuilder();
-        for(String s : arr) {
-            builder.append(s);
-        }
-        String str = builder.toString().trim();
-
-
+        // TODO suppr
         for (String lines : rawFrame.getRawFrame()) {
             //for (String elem : lines) {
                 System.out.print(lines);
             //}
         }
+
 
         if (rawFrame.size() < 14) {
             try {
@@ -72,9 +67,9 @@ public class Main {
         }
 
         // CREATE FRAME
-        Frame f = null;
+        Frame f = new Frame();
         try {
-            f = new Frame(rawFrame);
+            f.init(rawFrame);
         } catch (BadFrameFormatException e) {
             e.printStackTrace();
         }
@@ -82,7 +77,7 @@ public class Main {
 
         // Sauvegarde dans un fichier
         try {
-            saveAsFile("data/testsave.txt", f);
+            saveAsFile(output_path, f);
         } catch (IOException e) {
             e.printStackTrace();
         }

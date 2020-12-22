@@ -32,27 +32,31 @@ public class Segment {
 
     private Message data;
 
-    public Segment() {
-        source_str = "0x";
-    }
 
+    public Segment() {}
 
     public void init(RawFrame segment) throws BadFrameFormatException {
-
-        // Source port
-        source_str = "0x";
-        for (int x = 0; x < 2; x++) {
-            source_str += segment.remove(0);
+        try {
+            // Source port
+            source_str = "0x";
+            for (int x = 0; x < 2; x++) {
+                source_str += segment.remove(0);
+            }
+            source = Integer.decode(source_str);
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Source port'");
         }
-        source = Integer.decode(source_str);
 
-
-        // Destination port
-        destination_str = "0x";
-        for (int x = 0; x < 2; x++) {
-            destination_str += segment.remove(0);
+        try {
+            // Destination port
+            destination_str = "0x";
+            for (int x = 0; x < 2; x++) {
+                destination_str += segment.remove(0);
+            }
+            destination = Integer.decode(destination_str);
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Destination port'");
         }
-        destination = Integer.decode(destination_str);
 
         try {
             // Sequence number
@@ -62,16 +66,19 @@ public class Segment {
             }
             seq_number = Long.decode(seq_number_str);
         } catch (Exception e) {
-            //e.printStackTrace();
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Sequence number'");
         }
 
-        // Acknowledgment number
-        ack_number_str = "0x";
-        for (int x = 0; x < 4; x++) {
-            ack_number_str += segment.remove(0);
+        try {
+            // Acknowledgment number
+            ack_number_str = "0x";
+            for (int x = 0; x < 4; x++) {
+                ack_number_str += segment.remove(0);
+            }
+            ack_number = Long.decode(ack_number_str);
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Acknowledgment number'");
         }
-        ack_number = Long.decode(ack_number_str);
 
 
         try {
@@ -165,117 +172,134 @@ public class Segment {
                 fin_txt = "Set";
             }
             flags_str += "\n\t\t.... .... ..." + fin + " = Fin: " + fin_txt;
-        } catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
-            return;
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau des champs 'Flags & Fragment offset'");
         }
 
-
-        // Window size value
-        window_size_str = "0x";
-        for (int x = 0; x < 2; x++) {
-            window_size_str += segment.remove(0);
-        }
-        window_size = Integer.decode(window_size_str);
-
-
-        // Checksum
-        checksum = "0x";
-        for (int x = 0; x < 2; x++) {
-            checksum += segment.remove(0);
+        try {
+            // Window size value
+            window_size_str = "0x";
+            for (int x = 0; x < 2; x++) {
+                window_size_str += segment.remove(0);
+            }
+            window_size = Integer.decode(window_size_str);
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Window size value'");
         }
 
-
-        // Urgent pointer
-        urgent_pointer_str = "0x";
-        for (int x = 0; x < 2; x++) {
-            urgent_pointer_str += segment.remove(0);
+        try {
+            // Checksum
+            checksum = "0x";
+            for (int x = 0; x < 2; x++) {
+                checksum += segment.remove(0);
+            }
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Checksum'");
         }
-        urgent_pointer = Integer.decode(urgent_pointer_str);
 
+        try {
+            // Urgent pointer
+            urgent_pointer_str = "0x";
+            for (int x = 0; x < 2; x++) {
+                urgent_pointer_str += segment.remove(0);
+            }
+            urgent_pointer = Integer.decode(urgent_pointer_str);
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Urgent pointer'");
+        }
 
-        // TODO options
-        options = "";
-        int options_kind;
-        int options_length;
-        int options_size = (header_length-5) * 4;
-        for (int x = 0; x < options_size; x++) {
-            // Kind
-            options_kind = Integer.decode("0x" + segment.remove(0));
+        try {
+            // Options
+            options = "";
+            int options_kind;
+            int options_length;
+            int options_size = (header_length-5) * 4;
+            for (int x = 0; x < options_size; x++) {
+                // Kind
+                options_kind = Integer.decode("0x" + segment.remove(0));
 
-            String options_data = "";
-            if (options_kind > 1) {
-                // Length
-                options_length = Integer.decode("0x" + segment.remove(0));
-                x++;
-
-                for (int y = 0; y < options_length - 2; y++) {
-                    options_data += segment.remove(0);
+                String options_data = "";
+                if (options_kind > 1) {
+                    // Length
+                    options_length = Integer.decode("0x" + segment.remove(0));
                     x++;
+
+                    for (int y = 0; y < options_length - 2; y++) {
+                        options_data += segment.remove(0);
+                        x++;
+                    }
                 }
+
+                switch (options_kind) {
+                    case 0:
+                        options += "\n\t\t> TCP Option (0) EOL End of Options List";
+                        break;
+                    case 1:
+                        options += "\n\t\t> TCP Option (1) No-Operation";
+                        break;
+                    case 2:
+                        options += "\n\t\t> TCP Option (2) Maximum Segment Size";
+                        options += "\n\t\t\tMSS: 0x" + options_data + " (" + Integer.decode("0x" + options_data) + ")";
+                        break;
+                    case 3:
+                        options += "\n\t\t> TCP Option (3) WSOPT - Window Scale";
+                        options += "\n\t\t\tDécalage: 0x" + options_data + " (" + Integer.decode("0x" + options_data) + ")";
+                        break;
+                    case 4:
+                        options += "\n\t\t> TCP Option (4) SACK Permitted";
+                        break;
+                    case 5:
+                        options += "\n\t\t> TCP Option (5) Selective ACK";
+                        break;
+                    case 6:
+                        options += "\n\t\t> TCP Option (6) Echo";
+                        break;
+                    case 7:
+                        options += "\n\t\t> TCP Option (7) Echo Reply";
+                        break;
+                    case 8:
+                        options += "\n\t\t> TCP Option (8) Timestamps";
+                        options += "\n\t\t\tTimestamp value: " + Integer.decode("0x" + options_data.substring(0,8));
+                        options += "\n\t\t\tTimestamp echo reply: " + Integer.decode("0x" + options_data.substring(8, 16));
+                        break;
+                    case 9:
+                        options += "\n\t\t> TCP Option (9) Partial Order Connection Permitted";
+                        break;
+                    case 10:
+                        options += "\n\t\t> TCP Option (10) Partial Order Service Profile";
+                        break;
+                    case 11:
+                        options += "\n\t\t> TCP Option (11) CC";
+                        break;
+                    case 12:
+                        options += "\n\t\t> TCP Option (12) CC.NEW";
+                        break;
+                    case 13:
+                        options += "\n\t\t> TCP Option (13) CC.ECHO";
+                        break;
+                    case 14:
+                        options += "\n\t\t> TCP Option (14) TCP Alternate Checksum Request";
+                        break;
+                    case 15:
+                        options += "\n\t\t> TCP Option (15) Partial Order Service Profile";
+                        break;
+
+                        //TODO
+                }
+
             }
-
-            switch (options_kind) {
-                case 0:
-                    options += "\n\t\t> TCP Option (0) EOL End of Options List";
-                    break;
-                case 1:
-                    options += "\n\t\t> TCP Option (1) No-Operation";
-                    break;
-                case 2:
-                    options += "\n\t\t> TCP Option (2) Maximum Segment Size";
-                    options += "\n\t\t\tMSS: 0x" + options_data + " (" + Integer.decode("0x" + options_data) + ")";
-                    break;
-                case 3:
-                    options += "\n\t\t> TCP Option (3) WSOPT - Window Scale";
-                    options += "\n\t\t\tDécalage: 0x" + options_data + " (" + Integer.decode("0x" + options_data) + ")";
-                    break;
-                case 4:
-                    options += "\n\t\t> TCP Option (4) SACK Permitted";
-                    break;
-                case 5:
-                    options += "\n\t\t> TCP Option (5) Selective ACK";
-                    break;
-                case 6:
-                    options += "\n\t\t> TCP Option (6) Echo";
-                    break;
-                case 7:
-                    options += "\n\t\t> TCP Option (7) Echo Reply";
-                    break;
-                case 8:
-                    options += "\n\t\t> TCP Option (8) Timestamps";
-                    options += "\n\t\t\tTimestamp value: " + Integer.decode("0x" + options_data.substring(0,8));
-                    options += "\n\t\t\tTimestamp echo reply: " + Integer.decode("0x" + options_data.substring(8, 16));
-                    break;
-                case 9:
-                    options += "\n\t\t> TCP Option (9) Partial Order Connection Permitted";
-                    break;
-                case 10:
-                    options += "\n\t\t> TCP Option (10) Partial Order Service Profile";
-                    break;
-                case 11:
-                    options += "\n\t\t> TCP Option (11) CC";
-                    break;
-                case 12:
-                    options += "\n\t\t> TCP Option (12) CC.NEW";
-                    break;
-                case 13:
-                    options += "\n\t\t> TCP Option (13) CC.ECHO";
-                    break;
-                case 14:
-                    options += "\n\t\t> TCP Option (14) TCP Alternate Checksum Request";
-                    break;
-                case 15:
-                    options += "\n\t\t> TCP Option (15) Partial Order Service Profile";
-                    break;
-
-                    //TODO
-            }
-
+        } catch (Exception e) {
+            throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Options'");
         }
 
+
+        data = new Message();
         if (segment.size() > 0) {
-            data = new Message(segment);
+            try {
+                data.init(segment);
+            } catch (BadFrameFormatException e) {
+                e.printStackTrace();
+            }
         } else {
             data = null;
         }
