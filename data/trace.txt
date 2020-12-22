@@ -1,0 +1,36 @@
+0000   48 d2 4f 71 a9 20 c4 b3 01 cb a8 6b 08 00 45 00  H.Oq. .....k..E.
+0010   02 28 00 00 40 00 40 06 7b cf c0 a8 01 11 84 e3  .(..@.@.{.......
+0020   76 64 fb e3 00 50 b4 57 3b 54 82 f7 1b fd 50 18  vd...P.W;T....P.
+0030   10 00 66 0c 00 00 47 45 54 20 2f 6c 6d 64 2f 6c  ..f...GET /lmd/l
+0040   69 63 65 6e 63 65 2f 70 75 62 6c 69 63 2f 69 6e  icence/public/in
+0050   64 65 78 2e 70 68 70 20 48 54 54 50 2f 31 2e 31  dex.php HTTP/1.1
+0060   0d 0a 48 6f 73 74 3a 20 77 77 77 2d 6c 69 63 65  ..Host: www-lice
+0070   6e 63 65 2e 75 66 72 2d 69 6e 66 6f 2d 70 36 2e  nce.ufr-info-p6.
+0080   6a 75 73 73 69 65 75 2e 66 72 0d 0a 43 6f 6e 6e  jussieu.fr..Conn
+0090   65 63 74 69 6f 6e 3a 20 6b 65 65 70 2d 61 6c 69  ection: keep-ali
+00a0   76 65 0d 0a 43 61 63 68 65 2d 43 6f 6e 74 72 6f  ve..Cache-Contro
+00b0   6c 3a 20 6d 61 78 2d 61 67 65 3d 30 0d 0a 55 70  l: max-age=0..Up
+00c0   67 72 61 64 65 2d 49 6e 73 65 63 75 72 65 2d 52  grade-Insecure-R
+00d0   65 71 75 65 73 74 73 3a 20 31 0d 0a 55 73 65 72  equests: 1..User
+00e0   2d 41 67 65 6e 74 3a 20 4d 6f 7a 69 6c 6c 61 2f  -Agent: Mozilla/
+00f0   35 2e 30 20 28 4d 61 63 69 6e 74 6f 73 68 3b 20  5.0 (Macintosh; 
+0100   49 6e 74 65 6c 20 4d 61 63 20 4f 53 20 58 20 31  Intel Mac OS X 1
+0110   30 5f 31 35 5f 36 29 20 41 70 70 6c 65 57 65 62  0_15_6) AppleWeb
+0120   4b 69 74 2f 35 33 37 2e 33 36 20 28 4b 48 54 4d  Kit/537.36 (KHTM
+0130   4c 2c 20 6c 69 6b 65 20 47 65 63 6b 6f 29 20 43  L, like Gecko) C
+0140   68 72 6f 6d 65 2f 38 37 2e 30 2e 34 32 38 30 2e  hrome/87.0.4280.
+0150   38 38 20 53 61 66 61 72 69 2f 35 33 37 2e 33 36  88 Safari/537.36
+0160   0d 0a 41 63 63 65 70 74 3a 20 74 65 78 74 2f 68  ..Accept: text/h
+0170   74 6d 6c 2c 61 70 70 6c 69 63 61 74 69 6f 6e 2f  tml,application/
+0180   78 68 74 6d 6c 2b 78 6d 6c 2c 61 70 70 6c 69 63  xhtml+xml,applic
+0190   61 74 69 6f 6e 2f 78 6d 6c 3b 71 3d 30 2e 39 2c  ation/xml;q=0.9,
+01a0   69 6d 61 67 65 2f 61 76 69 66 2c 69 6d 61 67 65  image/avif,image
+01b0   2f 77 65 62 70 2c 69 6d 61 67 65 2f 61 70 6e 67  /webp,image/apng
+01c0   2c 2a 2f 2a 3b 71 3d 30 2e 38 2c 61 70 70 6c 69  ,*/*;q=0.8,appli
+01d0   63 61 74 69 6f 6e 2f 73 69 67 6e 65 64 2d 65 78  cation/signed-ex
+01e0   63 68 61 6e 67 65 3b 76 3d 62 33 3b 71 3d 30 2e  change;v=b3;q=0.
+01f0   39 0d 0a 41 63 63 65 70 74 2d 45 6e 63 6f 64 69  9..Accept-Encodi
+0200   6e 67 3a 20 67 7a 69 70 2c 20 64 65 66 6c 61 74  ng: gzip, deflat
+0210   65 0d 0a 41 63 63 65 70 74 2d 4c 61 6e 67 75 61  e..Accept-Langua
+0220   67 65 3a 20 66 72 2d 46 52 2c 66 72 3b 71 3d 30  ge: fr-FR,fr;q=0
+0230   2e 39 0d 0a 0d 0a                                .9....
