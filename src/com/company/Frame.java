@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Frame {
+    private String header = "--- Ethernet II:";
     private String destination;
     private String source;
-    private String type_str;
     private String type;
-    private Datagram data; // du type d'une classe en fonction de la var type
+    private Datagram data;
 
-    public Frame(RawFrame frame) {
+    public Frame(RawFrame frame) throws BadFrameFormatException {
         // Destination
         destination = "";
         for (int x = 0; x < 5; x++) {
@@ -28,25 +28,25 @@ public class Frame {
 
 
         // Type
-        type = "";
+        String type_str = "";
         for (int x = 0; x < 2; x++) {
-            type += frame.remove(0);
+            type_str += frame.remove(0);
         }
-        switch (type) {
+        switch (type_str) {
             case "0800":
-                type_str = "IPv4 (0x0800)";
+                type = "IPv4 (0x0800)";
                 break;
             case "0806":
-                type_str = "ARP (0x0806)";
+                type = "ARP (0x0806)";
                 break;
             case "8035":
-                type_str = "RARP (0x8035)";
+                type = "RARP (0x8035)";
                 break;
             case "8098":
-                type_str = "Appletalk (0x8098)";
+                type = "Appletalk (0x8098)";
                 break;
             case "86dd":
-                type_str = "IPv6 (0x86dd)";
+                type = "IPv6 (0x86dd)";
                 break;
                 //TODO erreur
         }
@@ -67,14 +67,33 @@ public class Frame {
         //TODO gestion type de datagram : IPv4, ARP ...
     }
 
-    // getters pour tous les attributs
+
+    public String getHeader() {
+        return this.header;
+    }
+
+    public String getDestination() {
+        return this.destination;
+    }
+
+    public String getSource() {
+        return this.source;
+    }
+
+    public String getType() {
+        return this.type;
+    }
 
     @Override
     public String toString() {
-        return "\n\n--- Ethernet II:" +
+        String data_str = "";
+        if (data != null) {
+            data_str = data.toString();
+        }
+        return "--- Ethernet II:" +
                 "\n\tDestination: " + destination +
                 "\n\tSource: " + source +
-                "\n\tType: " + type_str +
-                data.toString();
+                "\n\tType: " + type +
+                data_str;
     }
 }

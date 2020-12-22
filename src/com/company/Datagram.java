@@ -5,7 +5,7 @@ import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import java.util.ArrayList;
 
 public class Datagram {
-    private int version;
+    private String version;
     private int ihl;
     private String tos;
 
@@ -31,10 +31,10 @@ public class Datagram {
 
     private Segment data;
 
-    public Datagram(RawFrame datagram) {
+    public Datagram(RawFrame datagram) throws BadFrameFormatException {
         String version_ihl = datagram.remove(0);
         // Version
-        version = Integer.decode("0x" + version_ihl.substring(0, 1));
+        version = Integer.decode("0x" + version_ihl.substring(0, 1)).toString();
 
         // IHL : valeur*4 (car mot de 32 bits)
         ihl = Integer.decode("0x" + version_ihl.substring(1, 2)) * 4;
@@ -156,13 +156,27 @@ public class Datagram {
             }
         }
 
-        data = new Segment(datagram);
+        data = new Segment();
+        if (datagram.size() > 0) {
+            try {
+                data.init(datagram);
+            } catch (BadFrameFormatException e) {
+                //throw new BadFrameFormatException(e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            data = null;
+        }
     }
 
     // getters pour tous les attributs
 
     @Override
     public String toString() {
+        String data_str = "";
+        if (data != null) {
+            data_str = data.toString();
+        }
         return "\n\n--- Internet Protocol:" +
                 "\n\tVersion: " + version +
                 "\n\tHeader Length: " + ihl +
@@ -176,6 +190,6 @@ public class Datagram {
                 "\n\tHeader checksum: " + header_checksum +
                 "\n\tSource: " + source +
                 "\n\tDestination: " + destination +
-                data.toString();
+                data_str;
     }
 }

@@ -22,7 +22,7 @@ public class RawFrame {
         return this.rawFrame.size();
     }
 
-    public String remove(int i) {
+    public String remove(int i) throws IndexOutOfBoundsException {
         return this.rawFrame.remove(i);
     }
 }

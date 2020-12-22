@@ -17,6 +17,7 @@ public class Message {
             }
             builder.append(temp);
         }
+        builder.insert(0, "\n\t");
         this.payload = builder.toString();
     }
 

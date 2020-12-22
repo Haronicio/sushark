@@ -2,8 +2,7 @@ package com.company;
 
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,16 +10,16 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Main {
-
     public static void main(String[] args) {
         System.out.println("-- main");
+        int cpt_line = 0;
 
 
         String file_path;
         if (args.length > 0) {
             file_path = args[0];
         } else {
-            file_path = "data/http.txt";
+            file_path = "data/half.txt";
         }
 
         // TODO prendre en compte le cas de plusieurs frame dans un fichier
@@ -34,12 +33,17 @@ public class Main {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
-                analyse(rawFrame, data);
+                cpt_line++;
+
+                analyse(rawFrame, data, cpt_line);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+        } catch (BadOffsetException e) {
+            e.printStackTrace();
+            return;
         }
 
         // sépare les lignes à partir des offset
@@ -58,15 +62,34 @@ public class Main {
             //}
         }
 
+        if (rawFrame.size() < 14) {
+            try {
+                throw new BadFrameFormatException("La trame contient moins de 14 Octets (taille minimale de l'entête)");
+            } catch (BadFrameFormatException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+
         // CREATE FRAME
-        Frame f = new Frame(rawFrame);
+        Frame f = null;
+        try {
+            f = new Frame(rawFrame);
+        } catch (BadFrameFormatException e) {
+            e.printStackTrace();
+        }
         System.out.println(f);
 
-        // TODO sauvegarder dans un fichier texte
+        // Sauvegarde dans un fichier
+        try {
+            saveAsFile("data/testsave.txt", f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private static void analyse(RawFrame rawFrame, String line) {
+    private static void analyse(RawFrame rawFrame, String line, int cpt_line) throws BadOffsetException {
         System.out.println("line: " + line);
         //String[] arr = line.split("[ ]*");
         String[] split_line = line.split("[ ]+");
@@ -92,10 +115,7 @@ public class Main {
                 // TODO excepetion => new RawFrame
                 System.out.println("Create new frame");
             } else {
-                // TODO exception
-                System.out.println("Offset invalide à la ligne x");
-
-                //TODO - Toute ligne incomplète doit être identifiée et soulever une erreur indiquant la position de la ligne en erreur.
+                throw new BadOffsetException("Offset invalide (" + firstElem + ") à la ligne " + cpt_line);
             }
 
             rawFrame.add(stringList); // TODO
@@ -111,5 +131,17 @@ public class Main {
             }
         }
         return stringList;
+    }
+
+
+    private static void saveAsFile(String fileName, Frame frame) throws IOException {
+        FileWriter fileWriter = new FileWriter(fileName);
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        /*printWriter.println(frame.getHeader());
+        printWriter.printf("\tDestination: %s", frame.getDestination());
+        printWriter.printf("\n\tSource: %s", frame.getDestination());
+        printWriter.printf("\n\tType: %s", frame.getDestination());*/
+        printWriter.print(frame);
+        printWriter.close();
     }
 }
