@@ -9,11 +9,11 @@ public class Analyzer {
     private ArrayList<RawFrame> rawFrameList;
     private RawFrame current_rawFrame;
     private ArrayList<Frame> frameList;
-    int cpt_frame;
+    private int cpt_frame;
 
 
     public Analyzer(String[] args) {
-        cpt_frame = 1; // TODO
+        cpt_frame = 1;
         int cpt_line = 0;
         this.rawFrameList = new ArrayList<>();
         this.frameList = new ArrayList<>();
@@ -154,5 +154,9 @@ public class Analyzer {
         }
         printWriter.close();
         fileWriter.close();
+    }
+
+    public ArrayList<Frame> getFrameList() {
+        return this.frameList;
     }
 }
