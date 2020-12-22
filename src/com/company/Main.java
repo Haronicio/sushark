@@ -50,11 +50,11 @@ public class Main {
         }
 
         // TODO suppr
-        for (String lines : rawFrame.getRawFrame()) {
+        /*for (String lines : rawFrame.getRawFrame()) {
             //for (String elem : lines) {
                 System.out.print(lines);
             //}
-        }
+        }*/
 
 
         if (rawFrame.size() < 14) {
