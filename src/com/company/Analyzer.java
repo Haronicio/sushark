@@ -10,6 +10,7 @@ public class Analyzer {
     private RawFrame current_rawFrame;
     private ArrayList<Frame> frameList;
     private int cpt_frame;
+    private String output_path = "out.txt";
 
 
     public Analyzer(String[] args) {
@@ -18,14 +19,13 @@ public class Analyzer {
         this.rawFrameList = new ArrayList<>();
         this.frameList = new ArrayList<>();
 
-        String file_path = "data/multi2.txt";
-        String output_path = "out.txt";
+        String file_path = "data/http.txt";
         if (args.length > 0) {
             if (args.length == 1) {
                 file_path = args[0];
             } else {
                 file_path = args[0];
-                output_path = args[1];
+                this.output_path = args[1];
             }
         }
 
@@ -70,14 +70,6 @@ public class Analyzer {
                 e.printStackTrace();
             }
             this.frameList.add(f);
-        }
-
-
-        // Sauvegarde dans un fichier
-        try {
-            saveAsFile(output_path);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -125,8 +117,11 @@ public class Analyzer {
         return stringList;
     }
 
+    public void saveAsFile() throws IOException {
+        saveAsFile(this.output_path);
+    }
 
-    private void saveAsFile(String fileName) throws IOException {
+    public void saveAsFile(String fileName) throws IOException {
         FileWriter fileWriter = new FileWriter(fileName);
         PrintWriter printWriter = new PrintWriter(fileWriter);
 
@@ -138,6 +133,15 @@ public class Analyzer {
         }
         printWriter.close();
         fileWriter.close();
+    }
+
+    // AFFICHAGE
+    public void display() {
+        int print_cpt = 1;
+        for (Frame frame : this.frameList) {
+            System.out.println("\n\nNo. " + print_cpt++);
+            System.out.println(frame);
+        }
     }
 
     public ArrayList<Frame> getFrameList() {

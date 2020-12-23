@@ -12,14 +12,13 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         Analyzer obj = new Analyzer(args);
+        obj.display();
 
-        ArrayList<Frame> frameList = obj.getFrameList();
-
-        // AFFICHAGE
-        int print_cpt = 1;
-        for (Frame frame : frameList) {
-            System.out.println("\n\nNo. " + print_cpt++);
-            System.out.println(frame);
+        // Sauvegarde dans un fichier
+        try {
+            obj.saveAsFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
