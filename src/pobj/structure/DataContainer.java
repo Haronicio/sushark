@@ -69,11 +69,6 @@ public class DataContainer
 				}
 			}
 		}
-		
-		
-		
-		
-		
 	}
 	
 	
@@ -133,7 +128,8 @@ public class DataContainer
 		String[] options = null;
 		
 		if(seg.getOptions() != null)
-			 options = seg.getOptions().split(">");
+		//	 options = seg.getOptions().split(">");
+			options = seg.getOptions().split("(\\n\\t\\t>)");
 	
 		setTCPOptions(options);
 		String[] res = {"Source Port: "+seg.getSource(),

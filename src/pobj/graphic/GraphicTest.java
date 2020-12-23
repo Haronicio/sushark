@@ -10,7 +10,7 @@ public class GraphicTest {
 
 	public static void main(String[] args) 
 	{
-		JFrame frame = new Window("SUshark",1200,800);
+		JFrame frame = new Window("SUshark",1200,700);
 
 	}
 

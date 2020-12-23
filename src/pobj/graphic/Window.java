@@ -25,6 +25,8 @@ public class Window extends JFrame
 	private JButton bouton = null;
 	private JPanel panneau = null;
 
+	private Analyzer analyzer;
+
 	public Window(String name,int w,int h) 
 	{
 		
@@ -60,7 +62,7 @@ public class Window extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(w, h));
-		setJMenuBar(menu = new Menu(this));
+		setJMenuBar(menu = new Menu(this)); //TODO
 		setVisible(true);
 	
 		
@@ -89,19 +91,9 @@ public class Window extends JFrame
 						remove(panneau);
 						setVisible(true);
 					}
-					
-					
 				}
 			});
-			
-			
 		}
-		
-			
-		
-
-		
-		
 	 }
 	
 	public String getFile()
@@ -112,14 +104,12 @@ public class Window extends JFrame
 	public void setFile(String file)
 	{
 		this.file= file;
-//		Decripteur dec = new Decripteur(parent.getFile());
-		
-//		System.out.println(dec);
 		String[] args = {file,"./res.txt"};
-		Analyzer a = new Analyzer(args);
-		showTree(a.getFrameList());
+		this.analyzer = new Analyzer(args);
+		showTree(this.analyzer.getFrameList());
 		hidePannel(panneau, bouton);
 	}
+
 	public void showTree(ArrayList<Frame> s)
 	{
 		setVisible(false);
@@ -166,6 +156,10 @@ public class Window extends JFrame
 	public void initDecryptorAnalyzor(File file)
 	{
 		
+	}
+
+	public Analyzer getAnalyzer() {
+		return this.analyzer;
 	}
 
 }

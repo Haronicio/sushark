@@ -23,6 +23,7 @@ public class Menu extends JMenuBar
 {
 	Tree tree;
 	Window parent;
+
 	public Menu(Window parent)
 	{
 		this.parent = parent;
@@ -108,6 +109,7 @@ public class Menu extends JMenuBar
 		//cr�ation d'une boite de dialogue pour h�berger le s�lectionneur
 		JDialog d = new JDialog(parent);
 		d.setLocationRelativeTo(null);
+		d.setAlwaysOnTop(true);
 		//cr�� un s�lectionneur de fichier
 		JFileChooser fileChooser = new JFileChooser();
 		//r�pertoir actuelle comme r�pertoir par d�faut
@@ -120,9 +122,6 @@ public class Menu extends JMenuBar
 			System.out.println("Graphic : Selected file: " + selectedFile.getAbsolutePath());
 			parent.setFile(selectedFile.getAbsolutePath());
 
-			
-			
-			
 		}
 //		
 		
@@ -178,8 +177,16 @@ public class Menu extends JMenuBar
 				System.out.println("Graphic : No file selected");
 				return;
 			}
+
+			try {
+				Analyzer analyzer = this.parent.getAnalyzer();
+				analyzer.saveAsFile(baseName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			
-			List<DataContainer> datas = tree.getDatas();
+			/*List<DataContainer> datas = tree.getDatas();
 			File export;
 			int i =0;
 			BufferedWriter bw;
@@ -227,8 +234,7 @@ public class Menu extends JMenuBar
 					e.printStackTrace();
 				}
 				
-			}
+			}*/
 		}
 	}
-	
 }
