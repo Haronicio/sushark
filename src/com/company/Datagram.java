@@ -140,7 +140,9 @@ public class Datagram {
                 case 46:
                     protocol_str = "RSVP (46)";
                     break;
-                    //TODO erreur
+                default:
+                    protocol_str = "Not supported";
+                    break;
             }
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Datagram au niveau du champ 'Protocol'");

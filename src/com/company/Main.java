@@ -11,9 +11,15 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        for (String arg : args) {
-            System.out.println(arg);
+        Analyzer obj = new Analyzer(args);
+
+        ArrayList<Frame> frameList = obj.getFrameList();
+
+        // AFFICHAGE
+        int print_cpt = 1;
+        for (Frame frame : frameList) {
+            System.out.println("\n\nNo. " + print_cpt++);
+            System.out.println(frame);
         }
-        new Analyzer(args);
     }
 }

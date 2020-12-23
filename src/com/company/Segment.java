@@ -264,10 +264,10 @@ public class Segment {
                     case 15:
                         options += "\n\t\t> TCP Option (15) Partial Order Service Profile";
                         break;
-
-                        //TODO
+                    default:
+                        options += "\n\t\t> Not supported";
+                        break;
                 }
-
             }
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format du Segment au niveau du champ 'Options'");

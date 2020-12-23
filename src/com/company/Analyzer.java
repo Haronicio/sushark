@@ -18,7 +18,7 @@ public class Analyzer {
         this.rawFrameList = new ArrayList<>();
         this.frameList = new ArrayList<>();
 
-        String file_path = "data/trace.txt";
+        String file_path = "data/multi2.txt";
         String output_path = "out.txt";
         if (args.length > 0) {
             if (args.length == 1) {
@@ -45,7 +45,6 @@ public class Analyzer {
             }
             myReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
             e.printStackTrace();
         } catch (BadOffsetException e) {
             e.printStackTrace();
@@ -71,14 +70,6 @@ public class Analyzer {
                 e.printStackTrace();
             }
             this.frameList.add(f);
-        }
-
-
-        // AFFICHAGE
-        int print_cpt = 1;
-        for (Frame frame : this.frameList) {
-            System.out.println("\n\nNo. " + print_cpt++);
-            System.out.println(frame);
         }
 
 

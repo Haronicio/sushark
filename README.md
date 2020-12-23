@@ -1,5 +1,5 @@
 # SUshark
-
+Haron DAUVET et Aurélien DUVAL
 
 
 ## Main.java

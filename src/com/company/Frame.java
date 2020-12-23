@@ -57,7 +57,9 @@ public class Frame {
                 case "86dd":
                     type = "IPv6 (0x86dd)";
                     break;
-                    //TODO erreur
+                default:
+                    type = "Not supported";
+                    break;
             }
         } catch (Exception e) {
             throw new BadFrameFormatException("Mauvais format de la Frame au niveau du champ 'Type'");
