@@ -1,4 +1,4 @@
-package com.company;
+package pobj.structure;
 
 import java.util.ArrayList;
 

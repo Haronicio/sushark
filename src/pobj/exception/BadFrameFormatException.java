@@ -1,4 +1,4 @@
-package com.company;
+package pobj.exception;
 
 public class BadFrameFormatException extends Exception{
     public BadFrameFormatException(String s)

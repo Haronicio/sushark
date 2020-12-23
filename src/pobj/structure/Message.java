@@ -1,4 +1,6 @@
-package com.company;
+package pobj.structure;
+
+import pobj.exception.BadFrameFormatException;
 
 public class Message {
     private String payload;

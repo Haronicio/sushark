@@ -1,4 +1,4 @@
-package com.company;
+package pobj.exception;
 
 public class BadOffsetException extends Exception{
     public BadOffsetException(String s)

@@ -1,4 +1,7 @@
-package com.company;
+package pobj.structure;
+
+import pobj.exception.BadFrameFormatException;
+import pobj.exception.BadOffsetException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -46,6 +49,7 @@ public class Analyzer {
             myReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return;
         } catch (BadOffsetException e) {
             e.printStackTrace();
         }

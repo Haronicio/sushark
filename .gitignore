@@ -1,0 +1,8 @@
+.DS_Store
+.idea/
+out/
+sushark.iml
+out.txt
+src/META-INF
+src/CLI/
+log.txt

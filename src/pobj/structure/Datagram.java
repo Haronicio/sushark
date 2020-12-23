@@ -1,8 +1,6 @@
-package com.company;
+package pobj.structure;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-
-import java.util.ArrayList;
+import pobj.exception.BadFrameFormatException;
 
 public class Datagram {
     private String version;

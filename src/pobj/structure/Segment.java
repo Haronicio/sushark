@@ -1,4 +1,6 @@
-package com.company;
+package pobj.structure;
+
+import pobj.exception.BadFrameFormatException;
 
 public class Segment {
     private String source;

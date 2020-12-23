@@ -1,7 +1,6 @@
-package com.company;
+package pobj.structure;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import pobj.exception.BadFrameFormatException;
 
 public class Frame {
     private String destination;
