@@ -161,6 +161,7 @@ public class Menu extends JMenuBar
 		{
 			JDialog d = new JDialog(parent);
 			d.setLocationRelativeTo(null);
+			d.setAlwaysOnTop(true);
 			
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setDialogTitle("Specify a file to save");
